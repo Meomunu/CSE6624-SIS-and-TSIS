@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accessibility Page</title>
+
+    <style>
+        body {
+            background: #f5f8f1;
+            color: #252525;
+            font-family: Arial;
+            text-align: center;
+        }
+
+        .box {
+            background: #404E4D;
+            color: white;
+            width: 300px;
+            margin: 50px auto;
+            padding: 25px;
+        }
+
+        button, input {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button:focus, input:focus, a:focus {
+            outline: 3px solid yellow;
+        }
+
+        a {
+            color: white;
+        }
+
+        footer {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main">Skip to content</a>
+
+<main id="main">
+    <div class="box">
+        <h1>Campus Clubs</h1>
+
+        <img src="club.jpg" alt="Students participating in a campus club">
+
+        <h2>Find a Club</h2>
+
+        <label for="search">Club name:</label>
+        <input id="search" type="text">
+
+        <button onclick="alert('Welcome to Campus Clubs!')">
+            Join Club
+        </button>
+
+        <h2>Accessibility notes</h2>
+        <ul>
+            <li>Added image alt text.</li>
+            <li>Added input label.</li>
+            <li>Improved color contrast.</li>
+            <li>Added keyboard focus styles.</li>
+            <li>Fixed heading order.</li>
+        </ul>
+    </div>
+</main>
+
+<footer>
+    CSE6624 Meiirzhan Seitkhan ID: 081011552746
+</footer>
+
+</body>
+</html>
