@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: #f5f8f1;
+            color: #252525;
+            text-align: center;
+        }
+
+        .page-section {
+            min-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-box {
+            width: 320px;
+            min-height: 320px;
+            background: #646881;
+            padding: 30px;
+            color: white;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            background: #f5f8f1;
+            color: #252525;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #dce5d5;
+        }
+
+        footer {
+            padding: 30px 15px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="page-section">
+            <div class="page-box">
+                <h1>Education Quiz</h1>
+                <p id="progress">Question 1/5</p>
+                <h3 id="question">Why is education important?</h3>
+                <div id="answers"></div>
+                <p id="feedback"></p>
+                <p id="score">Score: 0</p>
+                <button id="next" onclick="nextQuestion()" hidden>Next</button>
+                <button id="reset" onclick="startQuiz()" hidden>Play Again</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        CSE6624 Meiirzhan Seitkhan 081011552746 niche-13
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                q: "Why is education important?",
+                a: ["To learn new things", "To waste time", "To sleep"],
+                correct: 0
+            },
+            {
+                q: "Which skill helps solve problems?",
+                a: ["Critical thinking", "Ignoring", "Guessing"],
+                correct: 0
+            },
+            {
+                q: "What is the best way to learn?",
+                a: ["Practice", "Never try", "Give up"],
+                correct: 0
+            },
+            {
+                q: "What does teamwork improve?",
+                a: ["Communication", "Laziness", "Isolation"],
+                correct: 0
+            },
+            {
+                q: "Why should we keep learning?",
+                a: ["To develop ourselves", "To stop growing", "To avoid knowledge"],
+                correct: 0
+            }
+        ];
+
+        let current = 0;
+        let points = 0;
+
+        function showQuestion() {
+            document.getElementById("progress").textContent =
+                `Question ${current + 1}/5`;
+
+            document.getElementById("question").textContent =
+                questions[current].q;
+
+            document.getElementById("feedback").textContent = "";
+            document.getElementById("score").textContent = "Score: " + points;
+
+            const answers = document.getElementById("answers");
+            answers.innerHTML = "";
+
+            questions[current].a.forEach((answer, index) => {
+                const btn = document.createElement("button");
+                btn.textContent = answer;
+                btn.onclick = () => checkAnswer(index);
+                answers.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(index) {
+            const buttons = document.querySelectorAll("#answers button");
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (index === questions[current].correct) {
+                points++;
+                document.getElementById("feedback").textContent = "Correct!";
+            } else {
+                document.getElementById("feedback").textContent = "Incorrect!";
+            }
+
+            document.getElementById("score").textContent = "Score: " + points;
+            document.getElementById("next").hidden = false;
+        }
+
+        function nextQuestion() {
+            current++;
+
+            if (current < questions.length) {
+                showQuestion();
+                document.getElementById("next").hidden = true;
+            } else {
+                document.getElementById("question").textContent = "Quiz finished!";
+                document.getElementById("progress").textContent = "Completed";
+                document.getElementById("answers").innerHTML = "";
+                document.getElementById("feedback").textContent =
+                    "Your result: " + points + "/5";
+                document.getElementById("next").hidden = true;
+                document.getElementById("reset").hidden = false;
+            }
+        }
+
+        function startQuiz() {
+            current = 0;
+            points = 0;
+            document.getElementById("reset").hidden = true;
+            showQuestion();
+        }
+
+        startQuiz();
+    </script>
+</body>
+</html>
