@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accessibility Page</title>
 
     <style>
@@ -26,12 +27,13 @@
             margin: 10px;
         }
 
-        button:focus, input:focus, a:focus {
-            outline: 3px solid yellow;
+        a {
+            color: #054A29;
         }
 
-        a {
-            color: white;
+        button:focus, input:focus, a:focus {
+            outline: 3px solid orange;
+            outline-offset: 3px;
         }
 
         footer {
@@ -52,7 +54,7 @@
         <h2>Find a Club</h2>
 
         <label for="search">Club name:</label>
-        <input id="search" type="text">
+        <input id="search" type="text" required>
 
         <button onclick="alert('Welcome to Campus Clubs!')">
             Join Club
@@ -61,8 +63,8 @@
         <h2>Accessibility notes</h2>
         <ul>
             <li>Added image alt text.</li>
-            <li>Added input label.</li>
-            <li>Improved color contrast.</li>
+            <li>Connected label to input.</li>
+            <li>Improved text contrast.</li>
             <li>Added keyboard focus styles.</li>
             <li>Fixed heading order.</li>
         </ul>
@@ -70,7 +72,7 @@
 </main>
 
 <footer>
-    CSE6624 Meiirzhan Seitkhan ID: 081011552746
+    CSE6624 | Meiirzhan Seitkhan | ID: 081011552746
 </footer>
 
 </body>
