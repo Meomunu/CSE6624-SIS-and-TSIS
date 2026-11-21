@@ -4,76 +4,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessibility Page</title>
+    <title>Campus Clubs - Accessibility</title>
 
     <style>
         body {
             background: #f5f8f1;
             color: #252525;
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .skip-link:focus {
+            left: 10px;
+            top: 10px;
+            background: white;
+            color: #252525;
+            padding: 12px;
+            z-index: 10;
         }
 
         .box {
             background: #404E4D;
             color: white;
-            width: 300px;
-            margin: 50px auto;
+            max-width: 350px;
+            margin: 40px auto;
             padding: 25px;
+            border-radius: 10px;
         }
 
-        button, input {
-            padding: 10px;
-            margin: 10px;
+        img {
+            width: 130px;
+            height: 100px;
+            object-fit: contain;
+            display: block;
+            margin: 10px auto 20px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+        }
+
+        input, button {
+            padding: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input {
+            width: 100%;
+            max-width: 280px;
+        }
+
+        button {
+            display: block;
+            margin: 15px auto;
+            background: #054A29;
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #08723e;
         }
 
         a {
             color: #054A29;
         }
 
-        button:focus, input:focus, a:focus {
+        button:focus-visible,
+        input:focus-visible,
+        a:focus-visible,
+        .suggestions li:focus-visible {
             outline: 3px solid orange;
-            outline-offset: 3px;
+            outline-offset: 4px;
+        }
+
+        .suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 5px auto;
+            max-width: 280px;
+            text-align: left;
+        }
+
+        .suggestions li {
+            background: white;
+            color: #252525;
+            padding: 12px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .suggestions li:hover,
+        .suggestions li:focus {
+            background: #dcebd5;
+            outline: 2px solid #054A29;
+        }
+
+        #message {
+            color: white;
+            font-weight: bold;
+        }
+
+        .notes {
+            text-align: left;
+            line-height: 1.7;
         }
 
         footer {
             padding: 20px;
+            background: #404E4D;
+            color: white;
         }
     </style>
 </head>
+
 <body>
 
-<a href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<main id="main">
+<main id="main" tabindex="-1">
+
     <div class="box">
+
         <h1>Campus Clubs</h1>
 
-        <img src="club.jpg" alt="Students participating in a campus club">
+        <img
+            src="club.jpg"
+            alt="Students participating in a campus club"
+        >
 
         <h2>Find a Club</h2>
 
-        <label for="search">Club name:</label>
-        <input id="search" type="text" required>
+        <form id="clubForm">
 
-        <button onclick="alert('Welcome to Campus Clubs!')">
-            Join Club
-        </button>
+            <label for="search">Club name:</label>
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search for a club..."
+                autocomplete="off"
+                aria-describedby="searchHelp"
+                required
+            >
+
+            <p id="searchHelp">
+                Start typing to see available clubs.
+            </p>
+
+            <ul
+                id="suggestions"
+                class="suggestions"
+                aria-label="Club suggestions"
+            ></ul>
+
+            <button type="submit">Join Club</button>
+
+        </form>
+
+        <p id="message" role="status" aria-live="polite"></p>
 
         <h2>Accessibility notes</h2>
-        <ul>
-            <li>Added image alt text.</li>
-            <li>Connected label to input.</li>
+
+        <ul class="notes">
+            <li>Added alternative text to the image.</li>
+            <li>Connected labels with input fields.</li>
             <li>Improved text contrast.</li>
-            <li>Added keyboard focus styles.</li>
-            <li>Fixed heading order.</li>
+            <li>Added visible keyboard focus styles.</li>
+            <li>Fixed heading hierarchy.</li>
+            <li>Added a skip navigation link.</li>
+            <li>Made the search accessible by keyboard.</li>
         </ul>
+
     </div>
+
 </main>
 
 <footer>
     CSE6624 | Meiirzhan Seitkhan | ID: 081011552746
 </footer>
+
+<script>
+
+    const clubs = [
+        "Programming Club",
+        "Robotics Club",
+        "Chess Club",
+        "Science Club",
+        "Music Club",
+        "Art Club",
+        "Sports Club",
+        "Debate Club"
+    ];
+
+    const search = document.getElementById("search");
+    const suggestions = document.getElementById("suggestions");
+    const form = document.getElementById("clubForm");
+    const message = document.getElementById("message");
+
+    search.addEventListener("input", function() {
+
+        suggestions.innerHTML = "";
+        message.textContent = "";
+
+        const value = search.value.toLowerCase().trim();
+
+        if (value === "") {
+            return;
+        }
+
+        const matches = clubs.filter(club =>
+            club.toLowerCase().includes(value)
+        );
+
+        matches.forEach(club => {
+
+            const li = document.createElement("li");
+
+            li.textContent = club;
+            li.tabIndex = 0;
+
+            function chooseClub() {
+                search.value = club;
+                suggestions.innerHTML = "";
+                search.focus();
+            }
+
+            li.addEventListener("click", chooseClub);
+
+            li.addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    chooseClub();
+                }
+
+            });
+
+            suggestions.appendChild(li);
+
+        });
+
+        if (matches.length === 0) {
+            const li = document.createElement("li");
+            li.textContent = "No clubs found.";
+            li.style.cursor = "default";
+            suggestions.appendChild(li);
+        }
+
+    });
+
+    form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const club = search.value.trim();
+
+        if (!clubs.includes(club)) {
+            message.textContent = "Please select a valid club.";
+            return;
+        }
+
+        message.textContent =
+            "Welcome! You selected: " + club;
+
+        suggestions.innerHTML = "";
+
+    });
+
+</script>
 
 </body>
 </html>
